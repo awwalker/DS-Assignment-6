@@ -77,18 +77,7 @@ public class CollisionList {
 			return false;
 			
 		}
-			/*int index = list.indexOf(tmp);
-			if (index >= 0) { //add the collision object to the existing zip code list
-				list.get(index).add(col);				
-			}
-			else { //add the new zip code list
-				list.add(tmp);
-			}
-		}
-		catch (IllegalArgumentException ex ) {
-			return false;  //return false if the Collision constructor failed 
-		}
-		*/
+
 		return true; //return true to indicate that the object was added
 		
 	}
@@ -101,43 +90,31 @@ public class CollisionList {
 	 *  one per line, that contains k zip codes with the highest number of collisions
 	 */
 	public String getZipCodesWithMostCollisions (int k) {
-/*
-		@SuppressWarnings("unchecked")
-		ArrayList<ZipCodeList> sortedList = (ArrayList<ZipCodeList>) list.clone();
-		//sort the list 
-		Collections.sort(sortedList, new CompareByNumOfCollisionsDescending() );
-		*/
+
 		PriorityQueue<ZipCodeList> queue = 
 				new PriorityQueue<ZipCodeList>(100, new CompareByNumOfCollisionsDescending() );
+		
 		for(ZipCodeList zipList : list.values() ){
 			queue.add(zipList);
 		}
+		
 		StringBuffer result = new StringBuffer();
 		
 		int count = 0;
 		
 		for (int i = 0; i < k && i < queue.size() && count < queue.size(); i++ ) {
-			ZipCodeList current = queue.poll();
+			
+			ZipCodeList current = queue.peek();
 			int numCollisions = current.getTotalNumOfCollisions();
 			String zip = current.getZip();
 			do{
-				//int numCollisions = queue.poll().getTotalNumOfCollisions();
+				queue.poll();
 				result.append(String.format("    %5s  %5d collisions\n", zip,
 					numCollisions));
 				count++;
 			}
 			while( count + 1 < queue.size() && numCollisions == queue.peek().getTotalNumOfCollisions() );
 		}
-			/*
-			do { 
-				result.append(String.format("    %5s  %5d collisions\n",sortedList.get(count).getZip(),
-					sortedList.get(count).getTotalNumOfCollisions()));
-				count++;
-			}while ( count+1 < sortedList.size() 
-					&& sortedList.get(count).getTotalNumOfCollisions() 
-					== sortedList.get(count+1).getTotalNumOfCollisions() ) ;
-		}
-		*/
 		return result.toString();
 	}
 	
@@ -149,14 +126,10 @@ public class CollisionList {
 	 *  one per line, that contains k zip codes with the lowest number of collisions
 	 */
 	public String getZipCodesWithLeastCollisions (int k) {
-/*
-		@SuppressWarnings("unchecked")
-		ArrayList<ZipCodeList> sortedList = (ArrayList<ZipCodeList>) list.clone();
-		//sort the list 
-		Collections.sort(sortedList, new CompareByNumOfCollisionsAscending() );
-		*/
+
+		CompareByNumOfCollisionsAscending comp = new CompareByNumOfCollisionsAscending();
 		PriorityQueue<ZipCodeList> queue = 
-				new PriorityQueue<ZipCodeList>(100, new CompareByNumOfCollisionsAscending() ) ;
+				new PriorityQueue<ZipCodeList>(100, comp ) ;
 		
 		for( ZipCodeList zip : list.values() ){
 			queue.add(zip);
@@ -167,29 +140,20 @@ public class CollisionList {
 		
 		int count = 0;
 		
-		for (int i = 0; i < k && i < queue.size() && count< queue.size(); i++ ) {
-			ZipCodeList current = queue.poll();
-			int numCollisions = current.getTotalNumOfCollisions();
+		for (int i = 0; i < k && i < queue.size() && count < queue.size(); i++ ) {
+			ZipCodeList current = queue.peek();
 			String zip = current.getZip();
+			int numCollisions = current.getTotalNumOfCollisions();
 			
 			do{
-				//int numCollisions = queue.poll().getTotalNumOfCollisions();
+				queue.poll();
 				result.append(String.format("    %5s  %5d collisions\n", zip,
 					numCollisions));
 				count++;
 			}
-			while( count + 1 < queue.size() && numCollisions == queue.peek().getTotalNumOfCollisions() );
+			while( count + 1 < queue.size() && numCollisions == queue.peek().getTotalNumOfCollisions());
 		}
-			/*
-			do { 
-				result.insert(0, String.format("    %5s  %5d collisions\n", queue.get(count).getZip(),
-					sortedList.get(count).getTotalNumOfCollisions()));
-				count++;
-			}while ( count+1 < sortedList.size() 
-					&& sortedList.get(count).getTotalNumOfCollisions() 
-					== sortedList.get(count+1).getTotalNumOfCollisions() ) ;
-		}
-		*/
+
 		return result.toString();
 	}
 	
@@ -225,17 +189,18 @@ public class CollisionList {
 		int count = 0;
 		
 		for (int i = 0; i < k && i < queue.size() && count< queue.size(); i++ ) {
-			ZipCodeList current = queue.poll();
+			ZipCodeList current = queue.peek();
 			String zip = current.getZip();
 			killed = current.getTotalNumOfCyclistsKilled();
 			inj = current.getTotalNumOfCyclistsInjured();
 			do { 
+				queue.poll();
 				result.append( String.format("    %5s  %5d (%3d killed ) cyclists hurt\n", zip,
 						inj + killed, killed ));
 					count++;
 			}
 			while ( count+1 < queue.size() 
-					&& 0 == comp.compare(current, queue.poll() ) ) ;
+					&& 0 == comp.compare(current, queue.peek() ) ) ;
 		}
 		
 		return result.toString();
@@ -265,13 +230,12 @@ public class CollisionList {
 		int count = 0;
 		
 		for (int i = 0; i < k && i < queue.size() && count< queue.size(); i++ ) {
-			ZipCodeList current = queue.poll();
+			ZipCodeList current = queue.peek();
 			String zip = current.getZip();
 			inj = current.getTotalNumOfPersonsInjured();
 			killed = current.getTotalNumOfPersonsKilled();
 			do { 
-				//inj = sortedList.get(count).getTotalNumOfPersonsInjured();
-				//killed =  sortedList.get(count).getTotalNumOfPersonsKilled();
+				queue.poll();
 				result.append( String.format("    %5s  %5d (%3d killed ) persons hurt\n", zip,
 						inj + killed, killed ));
 					count++;

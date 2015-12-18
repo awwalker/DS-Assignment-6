@@ -64,7 +64,7 @@ public class CollisionInfo {
 			//task 1 
 			System.out.println("ZIP codes with the largest number of collisions:");
 			System.out.println( list.getZipCodesWithMostCollisions( 3 ) );
-/*
+
 			//task2
 			System.out.println("ZIP codes with the fewest number of collisions:");
 			System.out.println( list.getZipCodesWithLeastCollisions( 3 ) ); 
@@ -84,7 +84,7 @@ public class CollisionInfo {
 			//task6:
 			System.out.println("Fraction of collisions by hour:");
 			System.out.println(list.getHourlyStats());
-*/
+
 			elapsedTime2 =  System.nanoTime() - startTimer; 
 			if(i > 1){
 				avgComp += elapsedTime2;
