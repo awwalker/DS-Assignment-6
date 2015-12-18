@@ -1,7 +1,13 @@
-package proj6;
-
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+
+
+/*
+ * Try priority queue for all max/min computations of all zipcodes
+ * Try HashMap / TreeSet to store all data structures for a given zipcode?
+ * 
+ */
 
 /**
  * ZipCodeList contains collision objects that all occured in the same zip
@@ -11,9 +17,15 @@ import java.util.Iterator;
  *
  */
 public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeList>{
+	//maybe have zipcode list be a hash map
+	///with keys equal to zipcodes and then the value is a hashset instead
+	////guarantees O(n) for everything...and we never have to index to specific ones so who cares
+	////also never have to get just the last one so thats good...
 	
-	private ArrayList<Collision> list; 
-	
+	//maintain 4 separate pqs
+	///tasks 1-4 
+	//private ArrayList<Collision> list; 
+	private LinkedList<Collision> list;
 	private String zip; 
 	
 	private int totalNumOfCollisions;
@@ -33,7 +45,8 @@ public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeLis
 	 * @param col the initial collisions for this ZipCodeList object 
 	 */
 	public ZipCodeList ( Collision col ) { 
-		list = new ArrayList<Collision> () ;
+		//list = new ArrayList<Collision> () ;
+		list = new LinkedList<Collision>();
 		zip = col.getZip();
 		add(col);
 	}
@@ -44,8 +57,8 @@ public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeLis
 	 * @throws IllegalArgumentException when the zip code of the new Collision 
 	 * object col is not the same as the zip code for this ZipCodeList object 
 	 */
-	public void add (Collision col) throws IllegalArgumentException {
-		if (col == null ) return;
+	public ZipCodeList add (Collision col) throws IllegalArgumentException {
+		if (col == null ) return this;
 		if (!col.getZip().equals(zip))
 			throw new IllegalArgumentException ("Error: zip codes are not matching. ") ;
 		
@@ -61,6 +74,7 @@ public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeLis
 		totalNumOfMotoristsInjured += col.getMotoristsInjured();
 		totalNumOfMotoristsKilled += col.getMotoristsKilled();
 		
+		return this;
 	}
 
 	/**

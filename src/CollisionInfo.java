@@ -1,6 +1,3 @@
-
-package proj6;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -25,75 +22,84 @@ public class CollisionInfo {
 	 * execution of this program 
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
+		int k = 20;//run twenty times
+		long avgReadStore = 0;
+		long avgComp = 0;
 		
-		final int NUM_OF_ENTRIES = 21; 
-		long startTimer, elapsedTime1, elapsedTime2; 
-		
-		startTimer = System.nanoTime();
-		
-		if (args.length < 1) {
-			System.err.println("File name missing");
-			System.exit(0);
-		}
-		
-		File fileName = new File(args[0]);
-		
-		if (!fileName.canRead()) {
-			System.err.printf("Cannot read from file %s\n.", fileName.getAbsolutePath());
-			System.exit(0);
-		}
-		
-		Scanner fin = new Scanner(fileName);
-		
-		CollisionList list = new CollisionList();
-		
-		while ( fin.hasNextLine() ) {
+		for(int i = 0; i < k; i++){
+			final int NUM_OF_ENTRIES = 21; 
+			long startTimer, elapsedTime1, elapsedTime2;
+			
+			startTimer = System.nanoTime();
 
-			String textLine = fin.nextLine(); 
-			ArrayList <String> words = split (textLine ) ;
-
-			if (words.size() != NUM_OF_ENTRIES) {
-				continue; //skip lines that are not complete
+			if (args.length < 1) {
+				System.err.println("File name missing");
+				System.exit(0);
 			}
-			list.add(words);
+
+			File fileName = new File(args[0]);
+
+			if (!fileName.canRead()) {
+				System.err.printf("Cannot read from file %s\n.", fileName.getAbsolutePath());
+				System.exit(0);
+			}
+
+			Scanner fin = new Scanner(fileName);
+
+			CollisionList list = new CollisionList();
+
+			while ( fin.hasNextLine() ) {
+
+				String textLine = fin.nextLine(); 
+				ArrayList <String> words = split (textLine ) ;
+
+				if (words.size() != NUM_OF_ENTRIES) {
+					continue; //skip lines that are not complete
+				}
+				list.add(words);
+			}
+			elapsedTime1 = System.nanoTime() - startTimer; 
+
+			startTimer = System.nanoTime();
+			//task 1 
+			System.out.println("ZIP codes with the largest number of collisions:");
+			System.out.println( list.getZipCodesWithMostCollisions( 3 ) );
+/*
+			//task2
+			System.out.println("ZIP codes with the fewest number of collisions:");
+			System.out.println( list.getZipCodesWithLeastCollisions( 3 ) ); 
+
+			//task 3
+			System.out.println("ZIP codes with the most injuries and fatalities (combined):");
+			System.out.println( list.getZipCodesWithMostPersonIncidents( 3 ) );
+
+			//task 4
+			System.out.println("ZIP codes with the most cyclist injuries and fatalities:");
+			System.out.println( list.getZipCodesWithMostCyclistIncidents( 3 ) );
+
+			//task5:
+			System.out.println("Percentage of collisions involving certain vehicle type:");
+			System.out.println(list.getVehicleTypeStats());
+
+			//task6:
+			System.out.println("Fraction of collisions by hour:");
+			System.out.println(list.getHourlyStats());
+*/
+			elapsedTime2 =  System.nanoTime() - startTimer; 
+			if(i > 1){
+				avgComp += elapsedTime2;
+				avgReadStore += elapsedTime1;
+			}
+			System.out.println("\n\n============================================\n");
+			System.out.printf("Run %s Reading and storing data: %,15d nanoseconds\n", i, elapsedTime1);
+			System.out.printf("Run %s Computation of results  : %,15d nanoseconds\n", i, elapsedTime2);
+
+			fin.close();
+
 		}
-		elapsedTime1 = System.nanoTime() - startTimer; 
-		
-		startTimer = System.nanoTime();
-		//task 1 
-		System.out.println("ZIP codes with the largest number of collisions:");
-		System.out.println( list.getZipCodesWithMostCollisions( 3 ) );
-		
-		//task2
-		System.out.println("ZIP codes with the fewest number of collisions:");
-		System.out.println( list.getZipCodesWithLeastCollisions( 3 ) ); 
-
-		//task 3
-		System.out.println("ZIP codes with the most injuries and fatalities (combined):");
-		System.out.println( list.getZipCodesWithMostPersonIncidents( 3 ) );
-		
-		//task 4
-		System.out.println("ZIP codes with the most cyclist injuries and fatalities:");
-		System.out.println( list.getZipCodesWithMostCyclistIncidents( 3 ) );
-		
-		//task5:
-		System.out.println("Percentage of collisions involving certain vehicle type:");
-		System.out.println(list.getVehicleTypeStats());
-		
-		//task6:
-		System.out.println("Fraction of collisions by hour:");
-		System.out.println(list.getHourlyStats());
-
-		elapsedTime2 =  System.nanoTime() - startTimer; 
-
-		System.out.println("\n\n============================================\n");
-		System.out.printf("Reading and storing data: %,15d nanoseconds\n", elapsedTime1);
-		System.out.printf("Computation of results  : %,15d nanoseconds\n", elapsedTime2);
-				
-		fin.close();
-
+		System.out.printf("Avg Read and Store (Minus First 2 Runs): %,15d nanoseconds\n", avgReadStore/(k-2));
+		System.out.printf("Avg Comp (Minus First 2 Runs): %,15d nanoseconds\n\n", avgComp/(k-2));
 	}
-
 
 	/**
 	 * Splits a given line according to commas (commas within entries are ignored) 
@@ -107,7 +113,7 @@ public class CollisionInfo {
 		StringBuffer nextWord = new StringBuffer(); 
 		char nextChar;
 		boolean insideQuotes = false;
-		
+
 		for(int i = 0; i < lineLength; i++ ) {
 			nextChar = textLine.charAt(i); 
 			//add character to the current entry 
@@ -132,10 +138,10 @@ public class CollisionInfo {
 			else if (nextChar == ',' && !insideQuotes) {
 				//trim the white space before adding to the list
 				entries.add( nextWord.toString().trim() );
-				
+
 				nextWord = new StringBuffer();
 			}
-			
+
 			else {
 				System.err.println("This should never be printed.\n");
 			}
@@ -143,9 +149,9 @@ public class CollisionInfo {
 		//add the last word
 		//trim the white space before adding to the list
 		entries.add( nextWord.toString().trim() );
-				
+
 		return entries; 
 	}
-	
-	
+
+
 }

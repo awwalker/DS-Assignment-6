@@ -1,5 +1,3 @@
-package proj6;
-
 import java.util.ArrayList;
 
 /**
