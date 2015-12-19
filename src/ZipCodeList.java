@@ -1,13 +1,6 @@
 import java.util.Iterator;
 import java.util.LinkedList;
 
-
-/*
- * Try priority queue for all max/min computations of all zipcodes
- * Try HashMap / TreeSet to store all data structures for a given zipcode?
- * 
- */
-
 /**
  * ZipCodeList contains collision objects that all occured in the same zip
  * code. It keeps track of additional information like total number of
@@ -16,14 +9,7 @@ import java.util.LinkedList;
  *
  */
 public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeList>{
-	//maybe have zipcode list be a hash map
-	///with keys equal to zipcodes and then the value is a hashset instead
-	////guarantees O(n) for everything...and we never have to index to specific ones so who cares
-	////also never have to get just the last one so thats good...
-	
-	//maintain 4 separate pqs
-	///tasks 1-4 
-	//private ArrayList<Collision> list; 
+
 	private LinkedList<Collision> list;
 	private String zip; 
 	
@@ -44,7 +30,6 @@ public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeLis
 	 * @param col the initial collisions for this ZipCodeList object 
 	 */
 	public ZipCodeList ( Collision col ) { 
-		//list = new ArrayList<Collision> () ;
 		list = new LinkedList<Collision>();
 		zip = col.getZip();
 		add(col);

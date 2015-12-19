@@ -14,17 +14,12 @@ import java.util.PriorityQueue;
  */
 
 public class CollisionList {
-	//change to hashmap/treeset?
-	//try just priority queues
-	//zip is the key and then the object for that zip is the ziplist object
-
-	//private ArrayList<ZipCodeList> list;
+	
 	private HashMap< String , ZipCodeList > list;
 	/**
 	 * Creates an empty CollisionList object. 
 	 */
 	public CollisionList() {
-		//list = new ArrayList<ZipCodeList> ();
 		list = new HashMap< String, ZipCodeList >();
 	}
 
@@ -73,7 +68,6 @@ public class CollisionList {
 			else{
 				list.put(zip, tmp);
 			}
-			//list.put(zip, list.get(zip).add(col));
 		}
 		catch(IllegalArgumentException ex){
 			return false;
@@ -94,6 +88,7 @@ public class CollisionList {
 	//done
 	public String getZipCodesWithMostCollisions (int k) {
 		CompareByNumOfCollisionsAscending comp = new CompareByNumOfCollisionsAscending();
+		CompareByNumOfCollisionsDescending compA = new CompareByNumOfCollisionsDescending();
 		PriorityQueue<ZipCodeList> queue = 
 				new PriorityQueue<ZipCodeList>(3, comp );
 		//track size without counting size
@@ -118,12 +113,12 @@ public class CollisionList {
 					queue.add(zipList);//add it
 				}
 				//if its greater than the smallest but is already inside the queue
-				else if ( comp.compare(zipList, queue.peek()) > 0 && 
+				else if ( comp.compare(queue.peek(), zipList) < 0 && 
 						CollisionList.containsNumCollisions(queue, zipList.getTotalNumOfCollisions())){
 					queue.add(zipList); //add it
 				}
 				//if its greater than the smallest but is not already in the queue...tricky
-				else if( comp.compare(zipList, queue.peek()) > 0 && 
+				else if( comp.compare(queue.peek(), zipList) < 0 && 
 						!CollisionList.containsNumCollisions(queue, zipList.getTotalNumOfCollisions()) ){
 					ZipCodeList smallest = queue.peek();//track smallest
 					do{
@@ -145,7 +140,7 @@ public class CollisionList {
 		}
 
 		StringBuffer result = new StringBuffer();
-		//pop off elements in the priority queue and append them to the string buffer
+
 		while(!queue.isEmpty()){
 			ZipCodeList current = queue.peek();
 			String zip = current.getZip();
@@ -185,7 +180,7 @@ public class CollisionList {
 				if( 0 == compA.compare(zipList, queue.peek()) ){
 					queue.add(zipList);
 				}
-				else if( queue.contains(zipList)){
+				else if( CollisionList.containsNumCollisions(queue, zipList.getTotalNumOfCollisions())){
 					queue.add(zipList);
 				}
 				else if( compA.compare(queue.peek(), zipList) > 0 && 
