@@ -1,4 +1,3 @@
-//import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -13,7 +12,7 @@ import java.util.LinkedList;
  * ZipCodeList contains collision objects that all occured in the same zip
  * code. It keeps track of additional information like total number of
  * collisions, injuries and fatalities. 
- * @author Joanna K. 
+ * @author Aaron Walker and Joanna K. 
  *
  */
 public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeList>{
@@ -122,7 +121,7 @@ public class ZipCodeList  implements Iterable <Collision>, Comparable<ZipCodeLis
 			return false;
 		return true;
 	}
-
+	
 	/** 
 	 * Compares two ZioCodeList objects based on the zip code value stored in them.
 	 * The results are based on string comparison of the two zip codes. 

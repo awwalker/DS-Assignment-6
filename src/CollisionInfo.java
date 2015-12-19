@@ -7,7 +7,7 @@ import java.util.Scanner;
  * This is a program that computes some information about the data posted by
  * OpenNYC regarding the collision records on the streets of NYC.  
  * 
- * @author Joanna K.
+ * @author Aaron Walker and Joanna K.
  *
  */
 public class CollisionInfo {
@@ -22,7 +22,7 @@ public class CollisionInfo {
 	 * execution of this program 
 	 */
 	public static void main(String[] args) throws FileNotFoundException {
-		int k = 20;//run twenty times
+		int k = 102;//run 102 times so that averages are for 100 loops
 		long avgReadStore = 0;
 		long avgComp = 0;
 		
@@ -98,7 +98,8 @@ public class CollisionInfo {
 
 		}
 		System.out.printf("Avg Read and Store (Minus First 2 Runs): %,15d nanoseconds\n", avgReadStore/(k-2));
-		System.out.printf("Avg Comp (Minus First 2 Runs): %,15d nanoseconds\n\n", avgComp/(k-2));
+		System.out.printf("Avg Comp (Minus First 2 Runs): %,15d nanoseconds\n", avgComp/(k-2));
+		System.out.printf("Avg Total Time (Minus First 2 Runs): %,15d nanoseconds\n\n", (avgComp + avgReadStore)/(k-2));
 	}
 
 	/**
