@@ -88,7 +88,6 @@ public class CollisionList {
 	//done
 	public String getZipCodesWithMostCollisions (int k) {
 		CompareByNumOfCollisionsAscending comp = new CompareByNumOfCollisionsAscending();
-		CompareByNumOfCollisionsDescending compA = new CompareByNumOfCollisionsDescending();
 		PriorityQueue<ZipCodeList> queue = 
 				new PriorityQueue<ZipCodeList>(3, comp );
 		//track size without counting size
